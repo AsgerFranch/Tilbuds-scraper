@@ -3,117 +3,179 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tilbudsjæger – REMA 1000, Netto, Føtex & Coop 365</title>
+  <title>Tilbudsjæger: REMA 1000, Netto, Føtex og Coop 365</title>
+  <meta name="description" content="Sammenlign ugens skarpe dagligvaretilbud, kilopriser, kategori-benchmarks og protein pr. krone på tværs af REMA 1000, Netto, Føtex og Coop 365discount.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hepta+Slab:wght@700&family=JetBrains+Mono:wght@700&family=Public+Sans:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --brand: #003d7a;
-      --red: #e30613;
-      --green: #0a7d33;
-      --bg: #f4f6f9;
-      --card: #ffffff;
-      --text: #1a202c;
-      --muted: #64748b;
-      --border: #e2e8f0;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.45;
-    }
+    /* Hallmark · shape: app screen · genre: editorial · theme: custom · redesign: full
+     * idea: "Nordisk priskatalog hvor reelle prisfald og kilopris-benchmarks står skarpt mens støj gemmes i kompakte filtre" · vibe: "kontant nordisk købmandsavis med præcise tal"
+     * paper: oklch(97% 0.008 95) · accent: oklch(40% 0.13 150) · display: Hepta Slab · body: Public Sans
+     * nav: top masthead with inline store tabs · signature: multi-store deal card with live category benchmark ledger · states: default, hover, focus-visible, active, disabled, empty
+     * axes: light/slab-serif/chromatic-green · posture: restrained · contrast: pass · v2.0.0 */
+    /* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 · weakest: R, cut the staple radar bar and collapsed department and category rows into popover menus */
+    /* Hallmark · dropped radar-panel, btn-toggle-cats, #radar-panel, [data-radar], #btn-toggle-cats · user requested removing the staple radar and collapsing department and category chips into dropdown menus */
+    /* Hallmark · reworded "Alle 4 butikker – Tilbudsjæger" to "Alle 4 butikker: Tilbudsjæger" · 19 names the en-dash in the heading */
+    /* Hallmark · answered F7 · toolbar controls share a 36px control border while panels and cards climb the surface ladder */
+    @import url("./tokens.css");
+    @import url("./base.css");
+
     header {
-      background: var(--brand);
-      color: #fff;
-      padding: 1.2rem 1.5rem 0;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
-      transition: background-color 0.2s ease;
+      background: var(--color-paper-2);
+      color: var(--color-ink);
+      border-bottom: var(--rule-hair) solid var(--color-rule);
+      padding-top: var(--space-md);
     }
     .header-inner {
-      max-width: 1320px;
-      margin: 0 auto;
+      max-width: var(--container);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
+      padding-bottom: var(--space-md);
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+    }
+    h1 {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+      font-weight: 700;
+      letter-spacing: var(--tracking-display);
+      line-height: 1.1;
+      color: var(--color-ink);
+    }
+    .subtitle {
+      font-family: var(--font-body);
+      font-size: var(--text-xs);
+      color: var(--color-muted);
+      margin-top: var(--space-2xs);
+    }
+    .stats-bar {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
       align-items: center;
-      gap: 1rem;
-      padding-bottom: 1rem;
     }
-    h1 { font-size: 1.45rem; font-weight: 800; letter-spacing: -0.02em; }
-    .subtitle { font-size: 0.84rem; opacity: 0.88; margin-top: 0.15rem; }
-    .stats-bar { display: flex; gap: 0.65rem; flex-wrap: wrap; align-items: center; }
     .stat-pill {
-      background: rgba(255,255,255,0.15);
-      padding: 0.38rem 0.75rem;
-      border-radius: 8px;
-      font-size: 0.82rem;
+      padding: var(--space-2xs) var(--space-xs);
+      border-left: var(--rule-hair) solid var(--color-rule);
+      font-size: var(--text-xs);
+      color: var(--color-ink-2);
+      white-space: nowrap;
     }
-    .stat-pill strong { color: #ffd166; }
-    .cart-toggle-btn {
-      background: #ffd166;
-      color: #1a202c;
-      border: none;
-      padding: 0.45rem 0.85rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 800;
+    .stat-pill strong {
+      font-family: var(--font-outlier);
+      font-weight: 700;
+      color: var(--color-ink);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .btn, .cart-toggle-btn {
+      min-height: 36px;
+      padding: var(--space-2xs) var(--space-sm);
+      border-radius: var(--radius-card);
+      border: var(--rule-hair) solid var(--color-rule);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      font-weight: 400;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      justify-content: center;
+      gap: var(--space-xs);
+      white-space: nowrap;
+      user-select: none;
+      transition: transform var(--dur-micro) var(--ease-out), opacity var(--dur-micro) var(--ease-out);
     }
-    .cart-toggle-btn:hover { background: #ffca3a; }
+    .btn:hover:not(:disabled), .cart-toggle-btn:hover:not(:disabled) {
+      background: var(--color-paper-2);
+    }
+    .btn:active:not(:disabled), .cart-toggle-btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+    .btn:disabled, .cart-toggle-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .btn.active, .cart-toggle-btn.is-primary {
+      background: var(--color-ink);
+      color: var(--color-paper);
+      border-color: var(--color-ink);
+      font-weight: 700;
+    }
 
     .store-tabs {
-      max-width: 1320px;
-      margin: 0 auto;
+      max-width: var(--container);
+      margin-inline: auto;
+      padding-inline: var(--gutter);
       display: flex;
-      gap: 0.45rem;
+      gap: var(--space-2xs);
       overflow-x: auto;
     }
     .store-tab {
-      border: none;
-      background: rgba(255,255,255,0.14);
-      color: rgba(255,255,255,0.92);
-      padding: 0.65rem 1.15rem;
-      border-radius: 10px 10px 0 0;
-      font-size: 0.94rem;
-      font-weight: 700;
+      min-height: 40px;
+      border: var(--rule-hair) solid transparent;
+      border-bottom: none;
+      background: transparent;
+      color: var(--color-ink-2);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--radius-card) var(--radius-card) 0 0;
+      font-family: var(--font-body);
+      font-size: var(--text-sm);
+      font-weight: 400;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      transition: all 0.15s ease;
+      gap: var(--space-xs);
       white-space: nowrap;
+      transition: transform var(--dur-micro) var(--ease-out), opacity var(--dur-micro) var(--ease-out);
     }
-    .store-tab:hover { background: rgba(255,255,255,0.24); }
+    .store-tab:hover {
+      background: var(--color-paper-3);
+      color: var(--color-ink);
+    }
+    .store-tab:active {
+      transform: translateY(1px);
+    }
     .store-tab.active {
-      background: var(--bg);
-      color: var(--text);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      border-color: var(--color-rule);
+      font-weight: 700;
     }
     .store-count {
-      font-size: 0.75rem;
-      padding: 0.12rem 0.45rem;
-      border-radius: 999px;
-      background: rgba(0,0,0,0.18);
+      font-family: var(--font-outlier);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      padding: var(--space-3xs) var(--space-xs);
+      border-radius: var(--radius-pill);
+      background: var(--color-paper-3);
+      color: var(--color-ink);
+      font-variant-numeric: tabular-nums;
     }
     .store-tab.active .store-count {
-      background: #e2e8f0;
-      color: #1e293b;
+      background: var(--color-paper-2);
     }
 
-    main { max-width: 1320px; margin: 1.25rem auto; padding: 0 1.25rem 3rem; }
+    main {
+      max-width: var(--container);
+      margin-inline: auto;
+      padding: var(--space-lg) var(--gutter) var(--space-3xl);
+    }
 
-    /* Indkøbsliste */
     .cart-panel {
-      background: #fffbeb;
-      border: 2px solid #f59e0b;
-      border-radius: 12px;
-      padding: 1rem;
-      margin-bottom: 1.25rem;
+      background: var(--color-paper-2);
+      border: var(--rule-hair) solid var(--color-rule);
+      border-radius: var(--radius-card);
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
       display: none;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: var(--space-sm);
     }
     .cart-panel.open { display: flex; }
     .cart-header {
@@ -121,287 +183,438 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 0.6rem;
+      gap: var(--space-sm);
     }
-    .cart-title { font-weight: 800; font-size: 1rem; color: #92400e; }
-    .cart-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .cart-title {
+      font-size: var(--text-sm);
+      color: var(--color-ink);
+    }
+    .cart-actions {
+      display: flex;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+    }
     .cart-items {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 0.5rem;
+      gap: var(--space-xs);
     }
     .cart-row {
-      background: #fff;
-      border: 1px solid #fde68a;
-      border-radius: 8px;
-      padding: 0.45rem 0.65rem;
+      background: var(--color-paper);
+      border: var(--rule-hair) solid var(--color-rule);
+      border-radius: var(--radius-card);
+      padding: var(--space-xs) var(--space-sm);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 0.84rem;
+      gap: var(--space-xs);
+      font-size: var(--text-sm);
     }
-    .cart-row-info { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .cart-row-controls { display: inline-flex; align-items: center; gap: 0.3rem; flex-shrink: 0; }
+    .cart-row-info {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+    }
+    .cart-row-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2xs);
+      flex-shrink: 0;
+    }
     .qty-btn {
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: #f8fafc;
+      min-width: 32px;
+      min-height: 32px;
+      border-radius: var(--radius-card);
+      border: var(--rule-hair) solid var(--color-rule);
+      background: var(--color-paper-2);
+      color: var(--color-ink);
       font-weight: 700;
       cursor: pointer;
     }
-    .qty-btn:hover { background: #e2e8f0; }
+    .qty-btn:hover { background: var(--color-paper-3); }
+    .qty-btn:active { transform: translateY(1px); }
 
     .controls {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1rem;
-      margin-bottom: 1.25rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      background: var(--color-paper-2);
+      border-radius: var(--radius-card);
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
       display: flex;
       flex-direction: column;
-      gap: 0.85rem;
+      gap: var(--space-sm);
     }
     .filter-row, .sort-row, .chip-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: var(--space-xs);
       align-items: center;
-    }
-    .chip-row {
-      padding-top: 0.2rem;
+      position: relative;
     }
     input[type="search"] {
-      padding: 0.55rem 0.8rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.92rem;
-      background: #fff;
-      color: var(--text);
+      min-height: 36px;
+      padding: var(--space-2xs) var(--space-sm);
+      border: var(--rule-hair) solid var(--color-muted);
+      border-radius: var(--radius-card);
+      font-family: var(--font-body);
+      font-size: var(--text-md);
+      background: var(--color-paper);
+      color: var(--color-ink);
       flex: 1 1 240px;
-      min-width: 190px;
+      min-width: 180px;
+    }
+    input[type="search"]:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: -2px;
     }
 
-    .btn {
-      padding: 0.5rem 0.82rem;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: #fff;
-      color: var(--text);
-      font-size: 0.86rem;
-      font-weight: 600;
+    /* Kompakte dropdown-menuer til Afdeling og Kategori */
+    .filter-dropdown {
+      position: static;
+    }
+    .filter-dropdown > summary {
+      list-style: none;
+      min-height: 36px;
+      padding: var(--space-2xs) var(--space-sm);
+      border-radius: var(--radius-card);
+      border: var(--rule-hair) solid var(--color-rule);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      font-size: var(--text-sm);
+      font-weight: 400;
       cursor: pointer;
-      transition: all 0.12s ease;
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: var(--space-xs);
+      white-space: nowrap;
       user-select: none;
     }
-    .btn:hover:not(:disabled) { border-color: #cbd5e1; background: #f8fafc; }
-    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-    .btn.active {
-      background: var(--brand);
-      color: #fff;
-      border-color: var(--brand);
+    .filter-dropdown > summary::-webkit-details-marker { display: none; }
+    .filter-dropdown[open] > summary,
+    .filter-dropdown.has-selection > summary {
+      border-color: var(--color-ink);
+      font-weight: 700;
     }
-    .btn-offer.active {
-      background: var(--red);
-      border-color: var(--red);
-      color: #fff;
+    .dropdown-panel {
+      position: absolute;
+      inset-block-start: calc(100% + var(--space-2xs));
+      inset-inline: 0;
+      z-index: var(--z-dropdown);
+      max-width: 640px;
+      max-height: 320px;
+      overflow-y: auto;
+      background: var(--color-paper);
+      border: var(--rule-hair) solid var(--color-ink);
+      border-radius: var(--radius-card);
+      padding: var(--space-sm);
+      display: none;
+      flex-wrap: wrap;
+      gap: var(--space-2xs);
     }
-    .btn-food.active {
-      background: var(--green);
-      border-color: var(--green);
-      color: #fff;
+    .filter-dropdown[open] > .dropdown-panel {
+      display: flex;
     }
+    .dropdown-hint {
+      width: 100%;
+      font-size: var(--text-xs);
+      color: var(--color-muted);
+      padding-bottom: var(--space-2xs);
+      margin-bottom: var(--space-2xs);
+      border-bottom: var(--rule-hair) solid var(--color-rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
     .chip {
-      padding: 0.32rem 0.68rem;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: #f8fafc;
-      color: #334155;
-      font-size: 0.8rem;
-      font-weight: 600;
+      min-height: 32px;
+      padding: var(--space-2xs) var(--space-sm);
+      border-radius: var(--radius-pill);
+      border: var(--rule-hair) solid var(--color-rule);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      font-size: var(--text-xs);
+      font-weight: 400;
       cursor: pointer;
       user-select: none;
-      transition: all 0.1s ease;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2xs);
     }
-    .chip:hover { border-color: #94a3b8; background: #f1f5f9; }
+    .chip:hover { background: var(--color-paper-2); }
+    .chip:active { transform: translateY(1px); }
     .chip.active {
-      background: var(--brand);
-      color: #fff;
-      border-color: var(--brand);
+      background: var(--color-ink);
+      color: var(--color-paper);
+      border-color: var(--color-ink);
+      font-weight: 700;
     }
     .chip.excluded {
-      background: #fee2e2;
-      color: #991b1b;
-      border-color: #f87171;
+      background: var(--color-deal-soft);
+      color: var(--color-deal);
+      border-color: var(--color-deal);
       text-decoration: line-through;
     }
     .chip-clear {
-      background: #fef3c7;
-      color: #92400e;
-      border-color: #fcd34d;
-    }
-    .row-label {
-      font-size: 0.78rem;
+      background: var(--color-paper-3);
+      color: var(--color-ink);
+      border-color: var(--color-rule);
       font-weight: 700;
-      text-transform: uppercase;
-      color: var(--muted);
-      min-width: 78px;
+    }
+
+    .row-label {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      color: var(--color-muted);
+      margin-right: var(--space-2xs);
     }
     .results-info {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.85rem;
-      font-size: 0.88rem;
-      color: var(--muted);
+      margin-bottom: var(--space-sm);
+      font-size: var(--text-xs);
+      color: var(--color-muted);
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: var(--space-xs);
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: var(--gap-columns);
     }
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 0.9rem;
+      background: var(--color-paper);
+      border: var(--rule-hair) solid var(--color-rule);
+      border-radius: var(--radius-card);
+      padding: var(--space-md);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      min-width: 0;
+      transition: transform var(--dur-micro) var(--ease-out), opacity var(--dur-micro) var(--ease-out);
     }
     .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+      border-color: var(--color-ink);
+    }
+    .card.is-routine {
+      opacity: 0.72;
     }
     .badges {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 0.4rem;
-      margin-bottom: 0.5rem;
+      gap: var(--space-2xs);
+      margin-bottom: var(--space-sm);
+    }
+    .badge-group {
+      display: flex;
+      gap: var(--space-2xs);
+      flex-wrap: wrap;
+      align-items: center;
     }
     .badge {
-      font-size: 0.74rem;
+      font-size: var(--text-xs);
       font-weight: 700;
-      padding: 0.2rem 0.5rem;
-      border-radius: 6px;
+      padding: var(--space-3xs) var(--space-xs);
+      border-radius: var(--radius-card);
       display: inline-block;
+      white-space: nowrap;
     }
-    .badge-pct { background: var(--red); color: #fff; }
-    .badge-spot { background: #f59e0b; color: #fff; }
-    .badge-dept { background: #e2e8f0; color: #334155; font-weight: 600; }
+    .badge-pct {
+      font-family: var(--font-outlier);
+      background: var(--color-deal);
+      color: var(--color-paper);
+      font-variant-numeric: tabular-nums;
+    }
+    .badge-spot {
+      background: var(--color-gold-soft);
+      color: var(--color-gold-ink);
+      border: var(--rule-hair) solid var(--color-rule);
+    }
+    .badge-dept {
+      background: var(--color-paper-2);
+      color: var(--color-ink-2);
+      font-weight: 400;
+    }
+    .badge-store {
+      color: var(--color-paper);
+      font-size: var(--text-xs);
+      padding: var(--space-3xs) var(--space-xs);
+      border-radius: var(--radius-card);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .badge-store[data-chain="rema1000"] { background: var(--color-store-rema); }
+    .badge-store[data-chain="netto"] { background: var(--color-store-netto); }
+    .badge-store[data-chain="foetex"] { background: var(--color-store-foetex); }
+    .badge-store[data-chain="coop365"] { background: var(--color-store-coop); }
+    .badge-low8w {
+      background: var(--color-gold-soft);
+      color: var(--color-gold-ink);
+      border: var(--rule-hair) solid var(--color-rule);
+    }
+    .badge-routine {
+      background: var(--color-paper-2);
+      color: var(--color-muted);
+    }
 
     .img-wrap {
-      height: 130px;
+      height: 128px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 0.65rem;
+      margin-bottom: var(--space-sm);
+      background: var(--color-paper);
     }
     .img-wrap img {
       max-height: 100%;
       max-width: 100%;
+      width: auto;
+      height: auto;
       object-fit: contain;
     }
     .item-name {
-      font-size: 0.98rem;
+      font-family: var(--font-display);
+      font-size: var(--text-md);
       font-weight: 700;
-      color: var(--text);
-      margin-bottom: 0.2rem;
+      color: var(--color-ink);
+      line-height: 1.25;
+      margin-bottom: var(--space-2xs);
+      overflow-wrap: break-word;
+      min-width: 0;
     }
     .item-sub {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-bottom: 0.75rem;
+      font-size: var(--text-xs);
+      color: var(--color-muted);
+      margin-bottom: var(--space-sm);
     }
     .price-box {
       display: flex;
       align-items: baseline;
-      gap: 0.45rem;
-      margin-bottom: 0.6rem;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-sm);
       flex-wrap: wrap;
     }
     .price-now {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--text);
+      font-family: var(--font-outlier);
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: var(--color-ink);
+      font-variant-numeric: tabular-nums;
     }
-    .price-now.is-offer { color: var(--red); }
+    .price-now.is-offer {
+      color: var(--color-deal);
+    }
     .price-normal {
-      font-size: 0.82rem;
-      color: var(--muted);
+      font-size: var(--text-xs);
+      color: var(--color-muted);
       text-decoration: line-through;
+      font-variant-numeric: tabular-nums;
     }
     .saved-pill {
-      font-size: 0.78rem;
+      font-family: var(--font-outlier);
+      font-size: var(--text-xs);
       font-weight: 700;
-      color: var(--green);
-      background: #dcfce7;
-      padding: 0.15rem 0.45rem;
-      border-radius: 5px;
+      color: var(--color-accent);
+      background: var(--color-paper-2);
+      border: var(--rule-hair) solid var(--color-rule);
+      padding: var(--space-3xs) var(--space-xs);
+      border-radius: var(--radius-card);
+      font-variant-numeric: tabular-nums;
     }
     .metrics {
-      border-top: 1px solid var(--border);
-      padding-top: 0.6rem;
-      font-size: 0.79rem;
+      border-top: var(--rule-hair) solid var(--color-rule);
+      padding-top: var(--space-xs);
+      font-size: var(--text-xs);
       display: flex;
       flex-direction: column;
-      gap: 0.22rem;
-      color: #334155;
+      gap: var(--space-2xs);
+      color: var(--color-ink-2);
     }
-    .metric-row { display: flex; justify-content: space-between; gap: 0.3rem; }
-    .metric-val { font-weight: 700; text-align: right; }
-    .card-footer {
-      margin-top: 0.65rem;
+    .metric-row {
       display: flex;
-      gap: 0.4rem;
+      justify-content: space-between;
+      gap: var(--space-xs);
+    }
+    .metric-val {
+      font-family: var(--font-outlier);
+      font-weight: 700;
+      text-align: right;
+      color: var(--color-ink);
+      font-variant-numeric: tabular-nums;
+    }
+    .metric-val.is-good { color: var(--color-accent); }
+    .metric-val.is-bad { color: var(--color-deal); }
+
+    .card-footer {
+      margin-top: var(--space-sm);
+      display: flex;
+      gap: var(--space-2xs);
     }
     .btn-add-cart {
       flex: 1;
-      padding: 0.4rem 0.5rem;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-      background: #f8fafc;
-      color: var(--text);
-      font-size: 0.8rem;
+      min-height: 36px;
+      padding: var(--space-2xs) var(--space-xs);
+      border-radius: var(--radius-card);
+      border: var(--rule-hair) solid var(--color-rule);
+      background: var(--color-paper-2);
+      color: var(--color-ink);
+      font-size: var(--text-xs);
       font-weight: 700;
       cursor: pointer;
+      white-space: nowrap;
     }
-    .btn-add-cart:hover { background: #e2e8f0; }
+    .btn-add-cart:hover { background: var(--color-paper-3); }
+    .btn-add-cart:active { transform: translateY(1px); }
     .btn-add-cart.in-cart {
-      background: #dcfce7;
-      border-color: #86efac;
-      color: #166534;
+      background: var(--color-ink);
+      border-color: var(--color-ink);
+      color: var(--color-paper);
     }
+    .btn-mute {
+      min-height: 36px;
+      padding: var(--space-2xs) var(--space-xs);
+      border-radius: var(--radius-card);
+      border: var(--rule-hair) solid var(--color-rule);
+      background: var(--color-paper);
+      color: var(--color-muted);
+      font-size: var(--text-xs);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-mute:hover {
+      background: var(--color-deal-soft);
+      color: var(--color-deal);
+      border-color: var(--color-deal);
+    }
+    .btn-mute:active { transform: translateY(1px); }
     .card-link {
+      min-height: 36px;
       text-align: center;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--brand);
+      font-size: var(--text-xs);
+      font-weight: 700;
+      color: var(--color-ink);
       text-decoration: none;
-      padding: 0.4rem 0.6rem;
-      border-radius: 6px;
-      background: #f1f5f9;
+      padding: var(--space-2xs) var(--space-xs);
+      border-radius: var(--radius-card);
+      border: var(--rule-hair) solid var(--color-rule);
+      background: var(--color-paper);
+      white-space: nowrap;
     }
-    .card-link:hover { background: #e2e8f0; }
+    .card-link:hover { background: var(--color-paper-2); }
+    .card-link:active { transform: translateY(1px); }
     .empty {
       grid-column: 1 / -1;
       text-align: center;
-      padding: 3rem 1rem;
-      color: var(--muted);
+      padding: var(--space-2xl) var(--space-md);
+      color: var(--color-muted);
     }
   </style>
 </head>
@@ -410,12 +623,12 @@
     <div class="header-inner">
       <div>
         <h1 id="store-title">Tilbudsjæger</h1>
-        <div class="subtitle" id="meta-info">Indlæser butikker...</div>
+        <div class="subtitle" id="meta-info">Indlæser butikker…</div>
       </div>
       <div class="stats-bar">
-        <div id="stats-pills" style="display:flex;gap:0.65rem;flex-wrap:wrap;"></div>
-        <button type="button" class="cart-toggle-btn" id="btn-refresh-data" style="background:rgba(255,255,255,0.2);color:#fff;" title="Hent nyeste data.js uden om browser-cache">🔄 Opdater</button>
-        <button type="button" class="cart-toggle-btn" id="btn-toggle-cart">🛒 Indkøbsliste (<span id="cart-badge">0</span>)</button>
+        <div id="stats-pills" style="display:flex;gap:var(--space-xs);flex-wrap:wrap;"></div>
+        <button type="button" class="cart-toggle-btn" id="btn-refresh-data" title="Hent nyeste data.js uden om browser-cache">Opdater data</button>
+        <button type="button" class="cart-toggle-btn is-primary" id="btn-toggle-cart">Indkøbsliste (<span id="cart-badge">0</span>)</button>
       </div>
     </div>
     <nav class="store-tabs" id="store-tabs" aria-label="Vælg supermarked"></nav>
@@ -424,40 +637,51 @@
   <main>
     <section class="cart-panel" id="cart-panel" aria-label="Indkøbsliste">
       <div class="cart-header">
-        <div class="cart-title" id="cart-summary">🛒 Indkøbsliste (0 varer)</div>
+        <div class="cart-title" id="cart-summary">Indkøbsliste (0 varer)</div>
         <div class="cart-actions">
-          <button type="button" class="btn" id="btn-copy-cart">📋 Kopiér liste</button>
-          <button type="button" class="btn" id="btn-clear-cart">🗑️ Tøm liste</button>
+          <button type="button" class="btn" id="btn-copy-cart">Kopiér liste</button>
+          <button type="button" class="btn" id="btn-clear-cart">Tøm liste</button>
         </div>
       </div>
       <div class="cart-items" id="cart-items"></div>
     </section>
 
-    <section class="controls">
+    <section class="controls" aria-label="Filtre og sortering">
       <div class="filter-row">
-        <input type="search" id="search" placeholder="Søg vare (fx oksekød, kylling, smør, skyr, æg)...">
-        <button type="button" class="btn btn-food active" id="btn-only-food">🥗 Kun madvarer</button>
-        <button type="button" class="btn btn-offer active" id="btn-only-offers">🔥 Kun tilbud</button>
-        <button type="button" class="btn" id="btn-meat" title="Inkluderer fersk kød/fisk, frost-kød/fisk (fx hel and & kylling), pålæg/bacon og fiskekonserves">🥩 Alt kød, fjerkræ & fisk</button>
+        <input type="search" id="search" placeholder="Søg vare (fx oksekød, kylling, smør, skyr, æg)…">
+        <button type="button" class="btn active" id="btn-only-food">Kun madvarer</button>
+        <button type="button" class="btn active" id="btn-only-offers">Kun tilbud</button>
+        <button type="button" class="btn btn-sharp active" id="btn-sharp" title="Skjuler småpenge-rabatter under 5 kr og kræver mindst 25% rabat eller 12 kr sparet">Kun skarpe tilbud</button>
+        <button type="button" class="btn" id="btn-meat" title="Inkluderer fersk kød og fisk, frost, pålæg, bacon og fiskekonserves">Kød og fisk</button>
+
+        <details class="filter-dropdown" id="dept-dropdown">
+          <summary id="dept-summary">Afdeling (Alle)</summary>
+          <div class="dropdown-panel" id="dept-chips"></div>
+        </details>
+
+        <details class="filter-dropdown" id="cat-dropdown">
+          <summary id="cat-summary">Kategori (Alle)</summary>
+          <div class="dropdown-panel" id="cat-chips"></div>
+        </details>
       </div>
 
-      <div class="chip-row" id="dept-chips"></div>
-      <div class="chip-row" id="cat-chips"></div>
+      <div class="chip-row" id="muted-chips" style="display:none;"></div>
 
       <div class="sort-row">
-        <span class="row-label">Sortér:</span>
-        <button type="button" class="btn active" data-sort="saved_pct">🏷️ Mest nedsat (%)</button>
-        <button type="button" class="btn" data-sort="saved_kr">💰 Mest nedsat (kr)</button>
-        <button type="button" class="btn" data-sort="unit_price">⚖️ Laveste kilopris (kr/kg)</button>
-        <button type="button" class="btn" id="btn-sort-lean" data-sort="lean_prot" title="Kun proteinrige varer (min. 10g protein pr. 100 kcal) sorteret efter g protein pr. kr">🎯 Magert protein pr. kr</button>
-        <button type="button" class="btn" id="btn-sort-prot" data-sort="prot_per_kr">💪 Mest protein pr. kr (g/kr)</button>
-        <button type="button" class="btn" id="btn-sort-kcal" data-sort="kcal_per_kr">🔋 Flest kalorier pr. kr (kcal/kr)</button>
+        <span class="row-label">Sortér efter</span>
+        <button type="button" class="btn active" data-sort="deal_score" title="Kombinerer procentrabat, kronebesparelse og pris under kategoriens normalpris">Bedste kup</button>
+        <button type="button" class="btn" data-sort="saved_pct">Mest nedsat (%)</button>
+        <button type="button" class="btn" data-sort="saved_kr">Mest nedsat (kr)</button>
+        <button type="button" class="btn" data-sort="unit_price">Laveste kilopris</button>
+        <button type="button" class="btn" id="btn-sort-lean" data-sort="lean_prot" title="Kun proteinrige varer (min. 10g protein pr. 100 kcal) sorteret efter g protein pr. kr">Magert protein pr. kr</button>
+        <button type="button" class="btn" id="btn-sort-prot" data-sort="prot_per_kr">Protein pr. kr</button>
+        <button type="button" class="btn" id="btn-sort-kcal" data-sort="kcal_per_kr">Kalorier pr. kr</button>
       </div>
     </section>
 
     <div class="results-info">
       <span id="result-count">0 varer</span>
-      <span>1. klik = vælg (blå) • 2. klik / højreklik = slå fra (🚫 rød) • 3. klik = normal</span>
+      <span>I menuerne: 1. klik vælger, 2. klik eller højreklik udelukker permanent</span>
     </div>
 
     <div class="grid" id="grid"></div>
@@ -475,22 +699,38 @@
 
       const storeKeys = ['rema1000', 'netto', 'foetex', 'coop365'];
 
+      let savedPrefs = {};
+      try {
+        savedPrefs = JSON.parse(localStorage.getItem('tilbudsjaeger_prefs') || '{}') || {};
+      } catch (_) {}
+
       const state = {
-        store: 'rema1000',
+        store: 'all',
         query: '',
         onlyFood: true,
         onlyOffers: true,
+        sharpOnly: savedPrefs.sharpOnly !== false,
         meatOnly: false,
         depts: new Set(),
-        excludeDepts: new Set(),
+        excludeDepts: new Set(savedPrefs.excludeDepts || []),
         cats: new Set(),
-        excludeCats: new Set(),
-        catsExpanded: false,
-        sort: 'saved_pct',
+        excludeCats: new Set(savedPrefs.excludeCats || []),
+        mutedWords: new Set(savedPrefs.mutedWords || []),
+        sort: 'deal_score',
         cartOpen: false
       };
 
-      // Indlæs indkøbsliste fra localStorage
+      function savePrefs() {
+        try {
+          localStorage.setItem('tilbudsjaeger_prefs', JSON.stringify({
+            sharpOnly: state.sharpOnly,
+            excludeDepts: [...state.excludeDepts],
+            excludeCats: [...state.excludeCats],
+            mutedWords: [...state.mutedWords]
+          }));
+        } catch (_) {}
+      }
+
       let cart = {};
       try {
         cart = JSON.parse(localStorage.getItem('tilbudsjaeger_cart') || '{}') || {};
@@ -505,12 +745,18 @@
       const searchEl = document.getElementById('search');
       const btnFood = document.getElementById('btn-only-food');
       const btnOffers = document.getElementById('btn-only-offers');
+      const btnSharp = document.getElementById('btn-sharp');
       const btnMeat = document.getElementById('btn-meat');
       const btnProt = document.getElementById('btn-sort-prot');
       const btnLean = document.getElementById('btn-sort-lean');
       const btnKcal = document.getElementById('btn-sort-kcal');
+      const deptDropdownEl = document.getElementById('dept-dropdown');
+      const deptSummaryEl = document.getElementById('dept-summary');
       const deptChipsEl = document.getElementById('dept-chips');
+      const catDropdownEl = document.getElementById('cat-dropdown');
+      const catSummaryEl = document.getElementById('cat-summary');
       const catChipsEl = document.getElementById('cat-chips');
+      const mutedChipsEl = document.getElementById('muted-chips');
       const gridEl = document.getElementById('grid');
       const countEl = document.getElementById('result-count');
       const sortBtns = document.querySelectorAll('[data-sort]');
@@ -522,11 +768,16 @@
       const btnCopyCart = document.getElementById('btn-copy-cart');
       const btnClearCart = document.getElementById('btn-clear-cart');
 
+      // Luk åbne dropdowns ved klik udenfor
+      document.addEventListener('click', e => {
+        if (deptDropdownEl.open && !deptDropdownEl.contains(e.target)) deptDropdownEl.open = false;
+        if (catDropdownEl.open && !catDropdownEl.contains(e.target)) catDropdownEl.open = false;
+      });
+
       function isFoodItem(item) {
         return item.is_food !== false;
       }
 
-      // Punkt 1: Saml alt kød, fjerkræ og fisk på tværs af Fersk, Frost (fx hel and/kylling), Køl (bacon/pålæg/pølser) og Kolonial (fiskekonserves)
       function isMeatOrFish(item) {
         const d = (item.dept || '').toLowerCase();
         const c = (item.cat || '').toLowerCase();
@@ -534,10 +785,73 @@
         return /kød|fjerkræ|fisk|skaldyr|bacon|pølser|pålæg$|^postej|kylling|okse|gris|svin|lam|kalv|and$/.test(c);
       }
 
+      function getMuteToken(item) {
+        return (item.name || '').toLowerCase().replace(/[^a-zæøå0-9\s]/g, ' ').trim().split(/\s+/).slice(0, 2).join(' ');
+      }
+
+      function isMuted(item) {
+        if (state.mutedWords.size === 0) return false;
+        const tok = getMuteToken(item);
+        if (state.mutedWords.has(tok)) return true;
+        const low = (item.name || '').toLowerCase();
+        for (const w of state.mutedWords) {
+          if (w && low.includes(w)) return true;
+        }
+        return false;
+      }
+
+      function isSharpOffer(item) {
+        if (!item.is_offer) return false;
+        const kr = item.saved_kr || 0;
+        const pct = item.saved_pct || 0;
+        const vsCat = item.vs_cat_pct || 0;
+        if (kr > 0 && kr < 5) return false;
+        if (kr === 0 && vsCat < 25) return false;
+        if (vsCat < -15 && kr < 20) return false;
+        return pct >= 25 || kr >= 12 || (kr > 0 && vsCat >= 25);
+      }
+
+      function dealScore(item) {
+        const kr = Math.max(0, item.saved_kr || 0);
+        const pct = Math.max(0, item.saved_pct || 0);
+        const vsCat = Math.max(-20, Math.min(60, item.vs_cat_pct || 0));
+        const base = pct > 0 && kr > 0 ? pct * Math.sqrt(kr) : (vsCat > 0 ? vsCat * 2.2 : 0);
+        const catBonus = vsCat > 10 ? vsCat * 1.1 : (vsCat < 0 ? vsCat * 1.5 : 0);
+        const histMod = (item.is_low_8w ? 25 : 0) - (item.is_routine ? 25 : 0);
+        return Math.round((base + catBonus + histMod) * 10) / 10;
+      }
+
+      function getActiveStoreObj() {
+        if (state.store !== 'all') return root.stores[state.store];
+        const allItems = [];
+        let total = 0;
+        let offers = 0;
+        for (const k of storeKeys) {
+          const st = root.stores[k];
+          if (!st) continue;
+          total += st.total || 0;
+          offers += st.offers || 0;
+          for (const it of st.items) {
+            if (!it.store_key) it.store_key = k;
+            allItems.push(it);
+          }
+        }
+        return {
+          id: 'all',
+          name: 'Alle 4 butikker',
+          api_label: 'REMA 1000, Netto, Føtex og Coop 365',
+          has_all: false,
+          total,
+          offers,
+          items: allItems
+        };
+      }
+
       function getBasePool(s) {
         return s.items.filter(i => {
           if (state.onlyFood && !isFoodItem(i)) return false;
           if (state.meatOnly && !isMeatOrFish(i)) return false;
+          if (isMuted(i)) return false;
           return true;
         });
       }
@@ -554,11 +868,28 @@
         renderCart();
       }
 
+      function syncCartWithRoot() {
+        for (const [k, entry] of Object.entries(cart)) {
+          const [storeKey, id] = k.split(':');
+          const s = root.stores && root.stores[storeKey];
+          if (!s) continue;
+          const m = s.items.find(i => String(i.id) === id) || s.items.find(i => i.name === entry.name);
+          if (m) {
+            entry.price = m.price;
+            entry.saved_kr = m.saved_kr || 0;
+            entry.underline = m.underline || entry.underline;
+          }
+        }
+        saveCart();
+      }
+
       function changeCartQty(key, itemObj, delta) {
         if (!cart[key] && delta > 0 && itemObj) {
+          const stKey = itemObj.store_key || key.split(':')[0] || state.store;
+          const stName = (root.stores[stKey] && root.stores[stKey].name) || 'Butik';
           cart[key] = {
             key,
-            storeName: root.stores[state.store].name,
+            storeName: stName,
             name: itemObj.name,
             underline: itemObj.underline || '',
             price: itemObj.price,
@@ -582,7 +913,7 @@
         const totalSaved = entries.reduce((acc, e) => acc + (e.saved_kr || 0) * e.qty, 0);
 
         cartBadgeEl.textContent = totalQty;
-        cartSummaryEl.innerHTML = `🛒 Indkøbsliste: <strong>${totalQty} stk.</strong> • Samlet pris: <strong>${fmtPrice(totalPrice)} kr</strong>${totalSaved > 0 ? ` • Du sparer: <strong style="color:var(--green)">${fmtPrice(totalSaved)} kr</strong>` : ''}`;
+        cartSummaryEl.innerHTML = `Indkøbsliste: <strong>${totalQty}&nbsp;stk.</strong> (${fmtPrice(totalPrice)}&nbsp;kr)${totalSaved > 0 ? `, du sparer <strong>${fmtPrice(totalSaved)}&nbsp;kr</strong>` : ''}`;
 
         if (entries.length === 0) {
           cartPanelEl.classList.remove('open');
@@ -596,7 +927,7 @@
         cartItemsEl.innerHTML = entries.map(e => `
           <div class="cart-row">
             <div class="cart-row-info" title="${e.storeName}: ${e.name} (${e.underline})">
-              <strong>${e.qty}×</strong> ${e.name} <span style="color:var(--muted)">(${e.storeName} • ${fmtPrice(e.price * e.qty)} kr)</span>
+              <strong>${e.qty}×</strong> ${e.name} <span>(${e.storeName}, ${fmtPrice(e.price * e.qty)}&nbsp;kr)</span>
             </div>
             <div class="cart-row-controls">
               <button type="button" class="qty-btn" data-cart-key="${e.key}" data-delta="-1">−</button>
@@ -614,16 +945,26 @@
       }
 
       function renderTabs() {
-        tabsEl.innerHTML = storeKeys.map(k => {
+        const allOfferCount = storeKeys.reduce((acc, k) => {
+          const s = root.stores[k];
+          return acc + s.items.filter(i => i.is_offer && (!state.onlyFood || isFoodItem(i)) && (!state.sharpOnly || isSharpOffer(i))).length;
+        }, 0);
+
+        const allTabHtml = `
+          <button type="button" class="store-tab ${state.store === 'all' ? 'active' : ''}" data-store="all">
+            <span>Alle butikker</span>
+            <span class="store-count">${allOfferCount}</span>
+          </button>
+        `;
+
+        tabsEl.innerHTML = allTabHtml + storeKeys.map(k => {
           const s = root.stores[k];
           const active = state.store === k ? 'active' : '';
-          const offerCount = state.onlyFood
-            ? s.items.filter(i => i.is_offer && isFoodItem(i)).length
-            : s.offers;
+          const offerCount = s.items.filter(i => i.is_offer && (!state.onlyFood || isFoodItem(i)) && (!state.sharpOnly || isSharpOffer(i))).length;
           return `
             <button type="button" class="store-tab ${active}" data-store="${k}">
               <span>${s.name}</span>
-              <span class="store-count">${offerCount} ${state.onlyFood ? 'madtilbud' : 'tilbud'}</span>
+              <span class="store-count">${offerCount}</span>
             </button>
           `;
         }).join('');
@@ -632,9 +973,7 @@
           btn.addEventListener('click', () => {
             state.store = btn.dataset.store;
             state.depts.clear();
-            state.excludeDepts.clear();
             state.cats.clear();
-            state.excludeCats.clear();
             syncStoreUI();
           });
         });
@@ -644,12 +983,14 @@
         if (!val) {
           incSet.clear();
           excSet.clear();
+          savePrefs();
           return;
         }
         if (forceExclude) {
           incSet.delete(val);
           if (excSet.has(val)) excSet.delete(val);
           else excSet.add(val);
+          savePrefs();
           return;
         }
         if (incSet.has(val)) {
@@ -660,24 +1001,33 @@
         } else {
           incSet.add(val);
         }
+        savePrefs();
+      }
+
+      function formatSummaryLabel(baseLabel, incSet, excSet, totalCount) {
+        const parts = [];
+        if (incSet.size > 0) parts.push(`${incSet.size} valgt`);
+        if (excSet.size > 0) parts.push(`${excSet.size} skjult`);
+        return parts.length > 0 ? `${baseLabel} (${parts.join(', ')})` : `${baseLabel} (${totalCount})`;
       }
 
       function renderChips(pool) {
-        // 1. Afdelings-chips (klik 1 = tilvælg, klik 2 / højreklik = slå fra, klik 3 = normal)
-        const depts = [...new Set(pool.map(i => i.dept).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'da'));
+        const depts = [...new Set([...pool.map(i => i.dept).filter(Boolean), ...state.excludeDepts])].sort((a, b) => a.localeCompare(b, 'da'));
         for (const d of [...state.depts]) { if (!depts.includes(d)) state.depts.delete(d); }
-        for (const d of [...state.excludeDepts]) { if (!depts.includes(d)) state.excludeDepts.delete(d); }
 
         const deptHasFilter = state.depts.size > 0 || state.excludeDepts.size > 0;
+        deptDropdownEl.classList.toggle('has-selection', deptHasFilter);
+        deptSummaryEl.textContent = formatSummaryLabel('Afdeling', state.depts, state.excludeDepts, depts.length);
+
         deptChipsEl.innerHTML = `
-          <span class="row-label">Afdeling:</span>
-          <button type="button" class="chip ${!deptHasFilter ? 'active' : ''}" data-dept="">Alle (${depts.length})</button>
+          <div class="dropdown-hint">
+            <span>1. klik vælger, 2. klik udelukker</span>
+            ${deptHasFilter ? '<button type="button" class="chip chip-clear" data-dept="">Nulstil afdelinger</button>' : `<button type="button" class="chip active" data-dept="">Alle (${depts.length})</button>`}
+          </div>
           ${depts.map(d => {
             const cls = state.depts.has(d) ? 'active' : (state.excludeDepts.has(d) ? 'excluded' : '');
-            const prefix = state.excludeDepts.has(d) ? '🚫 ' : '';
-            return `<button type="button" class="chip ${cls}" data-dept="${d}" title="1. klik: vælg • 2. klik / højreklik: slå fra">${prefix}${d}</button>`;
+            return `<button type="button" class="chip ${cls}" data-dept="${d}">${d}</button>`;
           }).join('')}
-          ${deptHasFilter ? '<button type="button" class="chip chip-clear" data-dept="">Nulstil</button>' : ''}
         `;
 
         deptChipsEl.querySelectorAll('[data-dept]').forEach(btn => {
@@ -693,78 +1043,119 @@
           });
         });
 
-        // 2. Kategori-chips (klik 1 = tilvælg, klik 2 / højreklik = slå fra, klik 3 = normal)
         const deptPool = pool.filter(i => {
           if (state.excludeDepts.has(i.dept)) return false;
           if (state.depts.size > 0 && !state.depts.has(i.dept)) return false;
           return true;
         });
-        const cats = [...new Set(deptPool.map(i => i.cat).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'da'));
+        const cats = [...new Set([...deptPool.map(i => i.cat).filter(Boolean), ...state.excludeCats])].sort((a, b) => a.localeCompare(b, 'da'));
         for (const c of [...state.cats]) { if (!cats.includes(c)) state.cats.delete(c); }
-        for (const c of [...state.excludeCats]) { if (!cats.includes(c)) state.excludeCats.delete(c); }
-
-        if (cats.length === 0) {
-          catChipsEl.style.display = 'none';
-          catChipsEl.innerHTML = '';
-          return;
-        }
 
         const catHasFilter = state.cats.size > 0 || state.excludeCats.size > 0;
-        const autoShow = state.depts.size > 0 || state.meatOnly || cats.length <= 14;
-        const isOpen = autoShow || state.catsExpanded;
-        const visibleCats = isOpen ? cats : cats.filter(c => state.cats.has(c) || state.excludeCats.has(c));
+        catDropdownEl.classList.toggle('has-selection', catHasFilter);
+        catSummaryEl.textContent = formatSummaryLabel('Kategori', state.cats, state.excludeCats, cats.length);
 
-        catChipsEl.style.display = 'flex';
-        catChipsEl.innerHTML = `
-          <span class="row-label">Kategori:</span>
-          <button type="button" class="chip ${!catHasFilter ? 'active' : ''}" data-cat="">Alle (${cats.length})</button>
-          ${visibleCats.map(c => {
-            const cls = state.cats.has(c) ? 'active' : (state.excludeCats.has(c) ? 'excluded' : '');
-            const prefix = state.excludeCats.has(c) ? '🚫 ' : '';
-            return `<button type="button" class="chip ${cls}" data-cat="${c}" title="1. klik: vælg • 2. klik / højreklik: slå fra">${prefix}${c}</button>`;
-          }).join('')}
-          ${!autoShow ? `<button type="button" class="chip" id="btn-toggle-cats">${isOpen ? '▴ Skjul liste' : `▾ Vælg underkategorier (${cats.length})`}</button>` : ''}
-          ${catHasFilter ? `<button type="button" class="chip chip-clear" data-cat="">Nulstil</button>` : ''}
-        `;
+        if (cats.length === 0) {
+          catDropdownEl.style.display = 'none';
+          catChipsEl.innerHTML = '';
+        } else {
+          catDropdownEl.style.display = 'inline-block';
+          catChipsEl.innerHTML = `
+            <div class="dropdown-hint">
+              <span>1. klik vælger, 2. klik udelukker</span>
+              ${catHasFilter ? '<button type="button" class="chip chip-clear" data-cat="">Nulstil kategorier</button>' : `<button type="button" class="chip active" data-cat="">Alle (${cats.length})</button>`}
+            </div>
+            ${cats.map(c => {
+              const cls = state.cats.has(c) ? 'active' : (state.excludeCats.has(c) ? 'excluded' : '');
+              return `<button type="button" class="chip ${cls}" data-cat="${c}">${c}</button>`;
+            }).join('')}
+          `;
 
-        const toggleCatsBtn = document.getElementById('btn-toggle-cats');
-        if (toggleCatsBtn) {
-          toggleCatsBtn.addEventListener('click', () => {
-            state.catsExpanded = !state.catsExpanded;
-            renderChips(pool);
+          catChipsEl.querySelectorAll('[data-cat]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              cycleFilterSet(state.cats, state.excludeCats, btn.dataset.cat, false);
+              renderChips(pool);
+              renderGrid();
+            });
+            btn.addEventListener('contextmenu', e => {
+              if (!btn.dataset.cat) return;
+              e.preventDefault();
+              cycleFilterSet(state.cats, state.excludeCats, btn.dataset.cat, true);
+              renderChips(pool);
+              renderGrid();
+            });
           });
         }
 
-        catChipsEl.querySelectorAll('[data-cat]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            cycleFilterSet(state.cats, state.excludeCats, btn.dataset.cat, false);
-            renderChips(pool);
-            renderGrid();
+        // Aktive filtre & skjulte varetyper vises som én kompakt række, kun når noget er fravalgt/valgt
+        const activePills = [];
+        for (const d of state.depts) activePills.push(`<button type="button" class="chip active" data-quick-dept="${d}" title="Klik for at fjerne filter">${d} ×</button>`);
+        for (const d of state.excludeDepts) activePills.push(`<button type="button" class="chip excluded" data-quick-dept="${d}" title="Klik for at gendanne afdeling">${d}</button>`);
+        for (const c of state.cats) activePills.push(`<button type="button" class="chip active" data-quick-cat="${c}" title="Klik for at fjerne filter">${c} ×</button>`);
+        for (const c of state.excludeCats) activePills.push(`<button type="button" class="chip excluded" data-quick-cat="${c}" title="Klik for at gendanne kategori">${c}</button>`);
+        for (const w of state.mutedWords) activePills.push(`<button type="button" class="chip excluded" data-unmute="${w}" title="Klik for at vise varetype igen">${w}</button>`);
+
+        if (activePills.length === 0) {
+          mutedChipsEl.style.display = 'none';
+          mutedChipsEl.innerHTML = '';
+        } else {
+          mutedChipsEl.style.display = 'flex';
+          mutedChipsEl.innerHTML = `
+            <span class="row-label">Aktive valg og fravalg</span>
+            ${activePills.join('')}
+            <button type="button" class="chip chip-clear" data-unmute="">Nulstil alle</button>
+          `;
+          mutedChipsEl.querySelectorAll('[data-quick-dept]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const d = btn.dataset.quickDept;
+              state.depts.delete(d);
+              state.excludeDepts.delete(d);
+              savePrefs();
+              syncStoreUI();
+            });
           });
-          btn.addEventListener('contextmenu', e => {
-            if (!btn.dataset.cat) return;
-            e.preventDefault();
-            cycleFilterSet(state.cats, state.excludeCats, btn.dataset.cat, true);
-            renderChips(pool);
-            renderGrid();
+          mutedChipsEl.querySelectorAll('[data-quick-cat]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const c = btn.dataset.quickCat;
+              state.cats.delete(c);
+              state.excludeCats.delete(c);
+              savePrefs();
+              syncStoreUI();
+            });
           });
-        });
+          mutedChipsEl.querySelectorAll('[data-unmute]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const w = btn.dataset.unmute;
+              if (!w) {
+                state.depts.clear();
+                state.excludeDepts.clear();
+                state.cats.clear();
+                state.excludeCats.clear();
+                state.mutedWords.clear();
+              } else {
+                state.mutedWords.delete(w);
+              }
+              savePrefs();
+              syncStoreUI();
+            });
+          });
+        }
       }
 
       function syncStoreUI() {
-        const s = root.stores[state.store];
+        const s = getActiveStoreObj();
         const pool = getBasePool(s);
 
-        document.documentElement.style.setProperty('--brand', s.color);
-        titleEl.textContent = `${s.name} – Tilbudsjæger`;
-        metaEl.textContent = `API: ${s.api_label} • Opdateret ${root.updated_at} • ${s.total.toLocaleString('da-DK')} varer (${s.offers} tilbud)`;
+        titleEl.textContent = `${s.name}: Tilbudsjæger`;
+        metaEl.textContent = `Kilde: ${s.api_label}, opdateret ${root.updated_at} (${s.total.toLocaleString('da-DK')} varer, ${s.offers} tilbud)`;
 
         btnFood.classList.toggle('active', state.onlyFood);
         btnMeat.classList.toggle('active', state.meatOnly);
+        btnSharp.classList.toggle('active', state.sharpOnly);
         btnOffers.classList.toggle('active', state.onlyOffers);
         btnOffers.textContent = s.has_all
-          ? (state.onlyOffers ? '🔥 Kun tilbud' : '🛒 Viser alle varer (klik for kun tilbud)')
-          : (state.onlyOffers ? '🔥 Kun med førpris' : '🗞️ Alle avisvarer');
+          ? (state.onlyOffers ? 'Kun tilbud' : 'Viser alle varer')
+          : (state.onlyOffers ? 'Kun med førpris' : 'Alle avisvarer');
 
         const hasProt = pool.some(i => i.prot_per_kr > 0);
         const hasKcal = pool.some(i => i.kcal_per_kr > 0);
@@ -778,7 +1169,7 @@
         let minMeatKg = null;
         let activeOffers = 0;
         for (const i of pool) {
-          if (i.is_offer) activeOffers++;
+          if (i.is_offer && (!state.sharpOnly || isSharpOffer(i))) activeOffers++;
           if (i.saved_kr > maxKr) maxKr = i.saved_kr;
           if (i.saved_pct > maxPct) maxPct = i.saved_pct;
           if (isMeatOrFish(i) && i.unit === 'kg' && i.unit_price > 0) {
@@ -787,10 +1178,10 @@
         }
 
         statsEl.innerHTML = `
-          <div class="stat-pill">${state.onlyFood ? 'Madtilbud' : 'Tilbud'}: <strong>${activeOffers}</strong></div>
+          <div class="stat-pill">${state.sharpOnly ? 'Skarpe tilbud' : (state.onlyFood ? 'Madtilbud' : 'Tilbud')}: <strong>${activeOffers}</strong></div>
           ${maxPct > 0 ? `<div class="stat-pill">Maks rabat: <strong>-${maxPct.toLocaleString('da-DK')}%</strong></div>` : ''}
-          ${maxKr > 0 ? `<div class="stat-pill">Maks besparelse: <strong>${maxKr.toLocaleString('da-DK')} kr</strong></div>` : ''}
-          ${minMeatKg !== null ? `<div class="stat-pill">Billigste kød/fisk: <strong>${minMeatKg.toLocaleString('da-DK')} kr/kg</strong></div>` : ''}
+          ${maxKr > 0 ? `<div class="stat-pill">Maks besparelse: <strong>${maxKr.toLocaleString('da-DK')}&nbsp;kr</strong></div>` : ''}
+          ${minMeatKg !== null ? `<div class="stat-pill">Billigste kød og fisk: <strong>${minMeatKg.toLocaleString('da-DK')}&nbsp;kr/kg</strong></div>` : ''}
         `;
 
         renderChips(pool);
@@ -800,15 +1191,17 @@
       }
 
       function renderGrid() {
-        const s = root.stores[state.store];
+        const s = getActiveStoreObj();
         const q = state.query.trim().toLowerCase();
 
         let filtered = s.items.filter(item => {
           if (state.onlyFood && !isFoodItem(item)) return false;
           if (state.meatOnly && !isMeatOrFish(item)) return false;
+          if (isMuted(item)) return false;
           if (state.onlyOffers) {
             if (!item.is_offer) return false;
-            if (!s.has_all && !(item.saved_kr > 0) && (state.sort === 'saved_pct' || state.sort === 'saved_kr')) return false;
+            if (state.sharpOnly && !isSharpOffer(item)) return false;
+            if (!s.has_all && !state.sharpOnly && !(item.saved_kr > 0) && (state.sort === 'saved_pct' || state.sort === 'saved_kr')) return false;
           }
           if (state.excludeDepts.has(item.dept)) return false;
           if (state.excludeCats.has(item.cat)) return false;
@@ -824,11 +1217,11 @@
           return true;
         });
 
-        // Fallback hvis valgte kategorier kun har partivarer uden førpris
-        if (filtered.length === 0 && state.onlyOffers && (state.sort === 'saved_pct' || state.sort === 'saved_kr')) {
+        if (filtered.length === 0 && state.onlyOffers) {
           filtered = s.items.filter(item => {
             if (state.onlyFood && !isFoodItem(item)) return false;
             if (state.meatOnly && !isMeatOrFish(item)) return false;
+            if (isMuted(item)) return false;
             if (!item.is_offer) return false;
             if (state.excludeDepts.has(item.dept)) return false;
             if (state.excludeCats.has(item.cat)) return false;
@@ -840,6 +1233,7 @@
         }
 
         filtered.sort((a, b) => {
+          if (state.sort === 'deal_score') return (dealScore(b) - dealScore(a)) || ((b.saved_kr || 0) - (a.saved_kr || 0));
           if (state.sort === 'saved_pct') return ((b.saved_pct || 0) - (a.saved_pct || 0)) || ((b.saved_kr || 0) - (a.saved_kr || 0)) || ((a.unit_price || 9999) - (b.unit_price || 9999));
           if (state.sort === 'saved_kr') return ((b.saved_kr || 0) - (a.saved_kr || 0)) || ((b.saved_pct || 0) - (a.saved_pct || 0)) || ((a.unit_price || 9999) - (b.unit_price || 9999));
           if (state.sort === 'unit_price') {
@@ -859,75 +1253,104 @@
 
         const shown = filtered.slice(0, 250);
         if (shown.length === 0) {
-          gridEl.innerHTML = '<div class="empty">Ingen varer matcher dine filtre i denne butik.</div>';
+          gridEl.innerHTML = '<div class="empty">Ingen varer matcher dine filtre. Prøv at slå "Kun skarpe tilbud" fra eller nulstil filtre.</div>';
           return;
         }
 
         const itemMap = {};
-        gridEl.innerHTML = shown.map(item => {
-          const cartKey = `${state.store}:${item.id}`;
+        gridEl.innerHTML = shown.map((item, idx) => {
+          const itemStoreKey = item.store_key || (state.store === 'all' ? 'rema1000' : state.store);
+          const itemStoreObj = root.stores[itemStoreKey] || s;
+          const cartKey = `${itemStoreKey}:${item.id}`;
           itemMap[cartKey] = item;
           const inCartQty = cart[cartKey] ? cart[cartKey].qty : 0;
 
-          const badge = item.saved_pct > 0
+          const storeBadge = state.store === 'all'
+            ? `<span class="badge-store" data-chain="${itemStoreKey}">${itemStoreObj.name}</span>`
+            : '';
+
+          const pctBadge = item.saved_pct > 0
             ? `<span class="badge badge-pct">${item.is_est_normal ? '~' : ''}-${item.saved_pct.toLocaleString('da-DK')}%</span>`
-            : (item.is_offer ? `<span class="badge badge-spot">${item.is_batch ? 'Partivare' : 'Avisvare'}</span>` : '<span></span>');
+            : (item.is_offer ? `<span class="badge badge-spot">${item.is_batch ? 'Partivare' : 'Avisvare'}</span>` : '');
+
+          const histBadge = item.is_low_8w
+            ? `<span class="badge badge-low8w" title="Laveste pris set i de seneste 8 uger">8-ugers lavpris</span>`
+            : (item.is_routine ? `<span class="badge badge-routine" title="Ofte på tilbud til ca. samme pris">Rutinetilbud</span>` : '');
 
           let normalHtml = '';
           if (item.normal && item.normal > item.price) {
             const normalLabel = item.is_est_normal
-              ? `Normal ~${fmtPrice(item.normal)} kr`
-              : `Før ${fmtPrice(item.normal)} kr`;
+              ? `Normal ~${fmtPrice(item.normal)}&nbsp;kr`
+              : `Før ${fmtPrice(item.normal)}&nbsp;kr`;
             normalHtml = `<span class="price-normal" title="${item.is_est_normal ? 'Estimeret ud fra normalpris på tilsvarende vare' : 'Førpris'}">${normalLabel}</span>
-               <span class="saved-pill">Spar ${fmtPrice(item.saved_kr)} kr</span>`;
+               <span class="saved-pill">Spar ${fmtPrice(item.saved_kr)}&nbsp;kr</span>`;
           }
 
           const unitHtml = item.unit_price > 0
-            ? `<div class="metric-row"><span>Pris pr. ${item.unit || 'enhed'}:</span><span class="metric-val">${fmtPrice(item.unit_price)} kr/${item.unit || ''}</span></div>`
+            ? `<div class="metric-row"><span>Pris pr. ${item.unit || 'enhed'}</span><span class="metric-val">${fmtPrice(item.unit_price)}&nbsp;kr/${item.unit || ''}</span></div>`
             : '';
 
-          const densityStr = item.prot_density ? ` • ${item.prot_density.toLocaleString('da-DK')}g/100kcal` : '';
+          let catBenchHtml = '';
+          if (item.cat_bench_price > 0 && item.vs_cat_pct !== null && item.vs_cat_pct !== undefined) {
+            const vsCls = item.vs_cat_pct >= 20 ? 'is-good' : (item.vs_cat_pct < 0 ? 'is-bad' : '');
+            const vsText = item.vs_cat_pct >= 0
+              ? `-${item.vs_cat_pct}% vs. kat. (${fmtPrice(item.cat_bench_price)}&nbsp;kr/${item.unit})`
+              : `+${Math.abs(item.vs_cat_pct)}% over kat. (${fmtPrice(item.cat_bench_price)}&nbsp;kr/${item.unit})`;
+            catBenchHtml = `<div class="metric-row"><span>Kat.-benchmark</span><span class="metric-val ${vsCls}">${vsText}</span></div>`;
+          }
+
+          const densityStr = item.prot_density ? `, ${item.prot_density.toLocaleString('da-DK')}&nbsp;g/100&nbsp;kcal` : '';
           const protHtml = item.prot_per_kr > 0
-            ? `<div class="metric-row"><span>Protein/kr:</span><span class="metric-val">${item.prot_per_kr.toLocaleString('da-DK')} g/kr (${item.protein_100}g/100g${densityStr})</span></div>`
+            ? `<div class="metric-row"><span>Protein pr. kr</span><span class="metric-val">${item.prot_per_kr.toLocaleString('da-DK')}&nbsp;g/kr (${item.protein_100}&nbsp;g/100&nbsp;g${densityStr})</span></div>`
             : '';
 
           const kcalHtml = item.kcal_per_kr > 0
-            ? `<div class="metric-row"><span>Energi/kr:</span><span class="metric-val">${item.kcal_per_kr.toLocaleString('da-DK')} kcal/kr (${item.kcal_100} kcal/100g)</span></div>`
+            ? `<div class="metric-row"><span>Energi pr. kr</span><span class="metric-val">${item.kcal_per_kr.toLocaleString('da-DK')}&nbsp;kcal/kr (${item.kcal_100}&nbsp;kcal/100&nbsp;g)</span></div>`
             : '';
 
           const maxQtyHtml = item.max_qty
-            ? `<div class="metric-row"><span>Begrænsning:</span><span class="metric-val">Maks. ${item.max_qty} stk.</span></div>`
+            ? `<div class="metric-row"><span>Begrænsning</span><span class="metric-val">Maks. ${item.max_qty}&nbsp;stk.</span></div>`
             : '';
 
+          const muteToken = getMuteToken(item);
+          const subParts = [item.underline, item.cat].filter(Boolean).join(', ');
+          const imgAttrs = idx < 4 ? 'fetchpriority="high"' : 'loading="lazy"';
+
           return `
-            <article class="card">
+            <article class="card ${item.is_routine ? 'is-routine' : ''}">
               <div>
                 <div class="badges">
-                  ${badge}
+                  <div class="badge-group">
+                    ${storeBadge}
+                    ${pctBadge}
+                    ${histBadge}
+                  </div>
                   <span class="badge badge-dept">${item.dept || ''}</span>
                 </div>
                 <div class="img-wrap">
-                  ${item.img ? `<img src="${item.img}" alt="${item.name}" loading="lazy">` : ''}
+                  ${item.img ? `<img src="${item.img}" alt="" width="128" height="128" ${imgAttrs}>` : ''}
                 </div>
                 <div class="item-name">${item.name}</div>
-                <div class="item-sub">${item.underline || ''}${item.cat ? ` • ${item.cat}` : ''}</div>
+                <div class="item-sub">${subParts}</div>
               </div>
               <div>
                 <div class="price-box">
-                  <span class="price-now ${item.is_offer ? 'is-offer' : ''}">${fmtPrice(item.price)} kr</span>
+                  <span class="price-now ${item.is_offer ? 'is-offer' : ''}">${fmtPrice(item.price)}&nbsp;kr</span>
                   ${normalHtml}
                 </div>
                 <div class="metrics">
                   ${unitHtml}
+                  ${catBenchHtml}
                   ${protHtml}
                   ${kcalHtml}
                   ${maxQtyHtml}
                 </div>
                 <div class="card-footer">
                   <button type="button" class="btn-add-cart ${inCartQty > 0 ? 'in-cart' : ''}" data-add-key="${cartKey}">
-                    ${inCartQty > 0 ? `✅ På listen (${inCartQty})` : '➕ Købsliste'}
+                    ${inCartQty > 0 ? `På listen (${inCartQty})` : 'Tilføj til liste'}
                   </button>
-                  <a class="card-link" href="${item.url}" target="_blank" rel="noopener" title="Åbn hos ${s.name}">↗</a>
+                  <button type="button" class="btn-mute" data-mute="${muteToken}" title="Skjul '${muteToken}' fremover">Skjul</button>
+                  <a class="card-link" href="${item.url}" target="_blank" rel="noopener" title="Åbn hos ${itemStoreObj.name}">Vis vare</a>
                 </div>
               </div>
             </article>
@@ -939,6 +1362,16 @@
             const k = btn.dataset.addKey;
             state.cartOpen = true;
             changeCartQty(k, itemMap[k], 1);
+          });
+        });
+
+        gridEl.querySelectorAll('[data-mute]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const tok = btn.dataset.mute;
+            if (!tok) return;
+            state.mutedWords.add(tok);
+            savePrefs();
+            syncStoreUI();
           });
         });
       }
@@ -953,21 +1386,28 @@
         syncStoreUI();
       });
 
+      btnSharp.addEventListener('click', () => {
+        state.sharpOnly = !state.sharpOnly;
+        if (state.sharpOnly) state.onlyOffers = true;
+        savePrefs();
+        syncStoreUI();
+      });
+
       btnOffers.addEventListener('click', () => {
         state.onlyOffers = !state.onlyOffers;
-        const s = root.stores[state.store];
-        if (!state.onlyOffers && s.has_all && (state.sort === 'saved_pct' || state.sort === 'saved_kr')) {
+        if (!state.onlyOffers) state.sharpOnly = false;
+        const s = getActiveStoreObj();
+        if (!state.onlyOffers && s.has_all && (state.sort === 'saved_pct' || state.sort === 'saved_kr' || state.sort === 'deal_score')) {
           state.sort = 'unit_price';
         }
+        savePrefs();
         syncStoreUI();
       });
 
       btnMeat.addEventListener('click', () => {
         state.meatOnly = !state.meatOnly;
         state.depts.clear();
-        state.excludeDepts.clear();
         state.cats.clear();
-        state.excludeCats.clear();
         syncStoreUI();
       });
 
@@ -978,26 +1418,23 @@
 
       const btnRefresh = document.getElementById('btn-refresh-data');
       function reloadDataJs() {
-        btnRefresh.textContent = '⏳ Henter...';
+        btnRefresh.textContent = 'Henter…';
         const s = document.createElement('script');
         s.src = 'data.js?t=' + Date.now();
         s.onload = () => {
-          if (window.REMA_DATA && window.REMA_DATA.stores) {
-            root = window.REMA_DATA;
-            syncStoreUI();
-          }
-          btnRefresh.textContent = '✅ Opdateret';
-          setTimeout(() => { btnRefresh.textContent = '🔄 Opdater'; }, 1500);
-          s.remove();
+          root = window.REMA_DATA;
+          syncCartWithRoot();
+          syncStoreUI();
+          btnRefresh.textContent = 'Opdateret ' + (root.updated_at || '');
+          setTimeout(() => { btnRefresh.textContent = 'Opdater data'; }, 2000);
         };
         s.onerror = () => {
-          btnRefresh.textContent = '🔄 Opdater';
-          s.remove();
+          btnRefresh.textContent = 'Opdater data';
         };
-        document.body.appendChild(s);
+        document.head.appendChild(s);
       }
       btnRefresh.addEventListener('click', reloadDataJs);
-      // Opdater automatisk hver time, hvis dashboardet står åbent hele døgnet
+      reloadDataJs();
       setInterval(reloadDataJs, 60 * 60 * 1000);
 
       btnCopyCart.addEventListener('click', () => {
@@ -1005,11 +1442,11 @@
         if (!entries.length) return;
         const total = entries.reduce((a, e) => a + e.price * e.qty, 0);
         const saved = entries.reduce((a, e) => a + (e.saved_kr || 0) * e.qty, 0);
-        const lines = entries.map(e => `- [ ] ${e.qty}x ${e.name} (${e.storeName}) - ${fmtPrice(e.price * e.qty)} kr`);
+        const lines = entries.map(e => `- [ ] ${e.qty}x ${e.name} (${e.storeName}): ${fmtPrice(e.price * e.qty)} kr`);
         lines.push(`\nTotal: ${fmtPrice(total)} kr (Sparer: ${fmtPrice(saved)} kr)`);
         navigator.clipboard.writeText(lines.join('\n'));
-        btnCopyCart.textContent = '✅ Kopieret!';
-        setTimeout(() => { btnCopyCart.textContent = '📋 Kopiér liste'; }, 1800);
+        btnCopyCart.textContent = 'Kopieret';
+        setTimeout(() => { btnCopyCart.textContent = 'Kopiér liste'; }, 1800);
       });
 
       btnClearCart.addEventListener('click', () => {
@@ -1023,29 +1460,29 @@
         btn.addEventListener('click', () => {
           if (btn.disabled) return;
           state.sort = btn.dataset.sort;
-          const s = root.stores[state.store];
-          if ((state.sort === 'saved_pct' || state.sort === 'saved_kr') && !state.onlyOffers && s.has_all) {
+          const s = getActiveStoreObj();
+          if ((state.sort === 'saved_pct' || state.sort === 'saved_kr' || state.sort === 'deal_score') && !state.onlyOffers && s.has_all) {
             state.onlyOffers = true;
           }
           syncStoreUI();
         });
       });
 
-      // Self-check: verificér alle sorteringer, multi-kategori og kød-filter
-      ['saved_pct', 'saved_kr', 'unit_price', 'lean_prot', 'prot_per_kr', 'kcal_per_kr'].forEach(testSort => {
+      // Self-check: verificér alle sorteringer, Alle-butikker fane, skarpe tilbud, dropdowns og kød-filter
+      ['deal_score', 'saved_pct', 'saved_kr', 'unit_price', 'lean_prot', 'prot_per_kr', 'kcal_per_kr'].forEach(testSort => {
         state.sort = testSort;
         renderGrid();
         console.assert(gridEl.children.length > 0, `Self-check fejlede for sort=${testSort}`);
       });
       state.meatOnly = true;
-      state.sort = 'saved_pct';
+      state.sort = 'deal_score';
       renderGrid();
       console.assert(gridEl.children.length > 0, 'Self-check fejlede for meatOnly=true');
+      console.assert(deptChipsEl.children.length > 1, 'Self-check fejlede for dept dropdown');
 
-      // Gendan starttilstand
       state.meatOnly = false;
       state.onlyOffers = true;
-      state.sort = 'saved_pct';
+      state.sort = 'deal_score';
       syncStoreUI();
     })();
   </script>

@@ -1,0 +1,15 @@
+[
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "app screen",
+  "theme": "custom",
+  "axes": "light/slab-serif/chromatic-green",
+  "nav": "top masthead with inline store tabs",
+  "signature": "multi-store deal card with live category benchmark ledger",
+  "waived": [],
+  "prompt": "Nordic grocery offer comparator across 4 supermarket chains",
+  "date": "2026-11-03"
+ }
+]

@@ -25,11 +25,12 @@ function Normalize-Key($text) {
 function Add-Benchmark($map, $key, $normUnitPrice, $protein, $kcal) {
     if (-not $key) { return }
     if (-not $map.ContainsKey($key)) {
-        $map[$key] = [PSCustomObject]@{ sum = 0.0; count = 0; protSum = 0.0; protCount = 0; kcalSum = 0.0; kcalCount = 0 }
+        $map[$key] = [PSCustomObject]@{ sum = 0.0; count = 0; protSum = 0.0; protCount = 0; kcalSum = 0.0; kcalCount = 0; prices = (New-Object System.Collections.Generic.List[double]) }
     }
     $entry = $map[$key]
     $entry.sum += $normUnitPrice
     $entry.count += 1
+    $entry.prices.Add([double]$normUnitPrice)
     if ($null -ne $protein) {
         $entry.protSum += $protein
         $entry.protCount += 1
@@ -37,6 +38,66 @@ function Add-Benchmark($map, $key, $normUnitPrice, $protein, $kcal) {
     if ($null -ne $kcal) {
         $entry.kcalSum += $kcal
         $entry.kcalCount += 1
+    }
+}
+
+function Get-BenchmarkMedian($map, $keys) {
+    foreach ($k in $keys) {
+        if ($k -and $map.ContainsKey($k) -and $map[$k].prices.Count -ge 2) {
+            $sorted = @($map[$k].prices | Sort-Object)
+            return [Math]::Round($sorted[[int][Math]::Floor($sorted.Count * 0.5)], 2)
+        }
+    }
+    return $null
+}
+
+# Indlæs og vedligehold rullende 8-ugers prishistorik (price_history.json)
+$histPath = Join-Path $PSScriptRoot "price_history.json"
+$todayStr = (Get-Date).ToString("yyyy-MM-dd")
+$cutoffStr = (Get-Date).AddDays(-56).ToString("yyyy-MM-dd")
+$priceHistory = @{}
+if (Test-Path $histPath) {
+    try {
+        $rawHist = Get-Content $histPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        foreach ($prop in $rawHist.PSObject.Properties) {
+            $kept = @($prop.Value | Where-Object { $_.d -ge $cutoffStr -and $_.d -ne $todayStr })
+            if ($kept.Count -gt 0) {
+                $lst = New-Object System.Collections.Generic.List[object]
+                foreach ($k in $kept) { $lst.Add($k) }
+                $priceHistory[$prop.Name] = $lst
+            }
+        }
+    } catch {}
+}
+
+function Add-HistoryAndEnrich($item, $storeKey, $catBenchPrice) {
+    $item | Add-Member -NotePropertyName "store_key" -NotePropertyValue $storeKey -Force
+    $item | Add-Member -NotePropertyName "cat_bench_price" -NotePropertyValue $catBenchPrice -Force
+    $vsCatPct = if ($catBenchPrice -gt 0 -and $item.unit_price -gt 0) {
+        [Math]::Round((($catBenchPrice - $item.unit_price) / $catBenchPrice) * 100, 0)
+    } else { $null }
+    $item | Add-Member -NotePropertyName "vs_cat_pct" -NotePropertyValue $vsCatPct -Force
+
+    $normName = Normalize-Key $item.name
+    $hKey = "$storeKey|$normName|$($item.unit)"
+    if (-not $priceHistory.ContainsKey($hKey)) {
+        $priceHistory[$hKey] = New-Object System.Collections.Generic.List[object]
+    }
+    $past = $priceHistory[$hKey]
+    $metric = if ($item.unit_price -gt 0) { [double]$item.unit_price } else { [double]$item.price }
+
+    # shortcut: gemmer kun aktive tilbud i price_history.json for at holde filen lille i git, skift til fuldt katalog hvis normalpriser skal spores.
+    if ($item.is_offer -and $metric -gt 0) {
+        $minPast = if ($past.Count -gt 0) { ($past | Measure-Object -Property p -Minimum).Minimum } else { $null }
+        $offerHits = @($past | Where-Object { $_.p -le ($metric * 1.03) }).Count
+        $item | Add-Member -NotePropertyName "is_low_8w" -NotePropertyValue ([bool]($past.Count -ge 1 -and $metric -lt ($minPast * 0.98))) -Force
+        $item | Add-Member -NotePropertyName "is_routine" -NotePropertyValue ([bool]($offerHits -ge 3)) -Force
+        if (-not ($past | Where-Object { $_.d -eq $todayStr })) {
+            $past.Add([PSCustomObject]@{ d = $todayStr; p = $metric })
+        }
+    } else {
+        $item | Add-Member -NotePropertyName "is_low_8w" -NotePropertyValue $false -Force
+        $item | Add-Member -NotePropertyName "is_routine" -NotePropertyValue $false -Force
     }
 }
 
@@ -289,12 +350,42 @@ function Fetch-TilbudsugenStore($chainSlug, $storeLabel, $defaultUrl) {
 }
 
 $nettoItems  = Fetch-TilbudsugenStore "Netto"       "2/4 Netto"             "https://netto.dk/netto-avisen/"
-$foetexItems = Fetch-TilbudsugenStore "F%C3%B8tex"  "3/4 Føtex"             "https://www.foetex.dk/avis/"
+$foetexItems = Fetch-TilbudsugenStore "F%C3%B8tex"  "3/4 Foetex"            "https://www.foetex.dk/avis/"
 $coopItems   = Fetch-TilbudsugenStore "365discount" "4/4 Coop 365discount"  "https://365discount.coop.dk/365avis/"
 
-# Self-check på alle 4 butikker inkl. madvarer, kalorier og rabatberegning
+# Berig alle varer med kategori-benchmark (median normalpris pr. kg/ltr) og 8-ugers prishistorik
+foreach ($pair in @(
+    @{ Key = "rema1000"; Items = $remaItems },
+    @{ Key = "netto";    Items = $nettoItems },
+    @{ Key = "foetex";   Items = $foetexItems },
+    @{ Key = "coop365";  Items = $coopItems }
+)) {
+    foreach ($it in $pair.Items) {
+        $cKey = Normalize-Key $it.cat
+        $nKey = Normalize-Key $it.name
+        $u = $it.unit
+        $bKeys = New-Object System.Collections.Generic.List[string]
+        if ($u -and $cKey) {
+            $bKeys.Add("$u|cat:$cKey")
+            foreach ($cw in ($cKey -split " ")) {
+                if ($cw.Length -ge 4 -and $cw -notin $stopWords) { $bKeys.Add("$u|cat:$cw") }
+            }
+        }
+        if ($u -and $nKey) {
+            foreach ($nw in ($nKey -split " ")) {
+                if ($nw.Length -ge 4 -and $nw -notin $stopWords) { $bKeys.Add("$u|$nw") }
+            }
+        }
+        $catBench = Get-BenchmarkMedian $benchByKey $bKeys
+        Add-HistoryAndEnrich $it $pair.Key $catBench
+    }
+}
+[System.IO.File]::WriteAllText($histPath, ($priceHistory | ConvertTo-Json -Depth 4 -Compress), (New-Object System.Text.UTF8Encoding($false)))
+
+# Self-check på alle 4 butikker inkl. madvarer, kalorier, kategori-benchmark og rabatberegning
 if ($remaItems.Count -lt 1000) { throw "Fejl: REMA 1000 returnerede kun $($remaItems.Count) varer" }
 if (($remaItems | Where-Object { $_.kcal_per_kr -gt 0 }).Count -lt 1000) { throw "Fejl: REMA 1000 mangler kcal_per_kr data" }
+if (($remaItems | Where-Object { $_.cat_bench_price -gt 0 }).Count -lt 1000) { throw "Fejl: REMA 1000 mangler cat_bench_price data" }
 foreach ($pair in @(
     @{ Name = "Netto"; Items = $nettoItems },
     @{ Name = "Føtex"; Items = $foetexItems },
@@ -336,8 +427,8 @@ $payload = [PSCustomObject]@{
         }
         foetex = [PSCustomObject]@{
             id        = "foetex"
-            name      = "Føtex"
-            api_label = "tilbudsugen.dk/api (Føtex)"
+            name      = "F$([char]0x00F8)tex"
+            api_label = "tilbudsugen.dk/api (F$([char]0x00F8)tex)"
             color     = "#0b2545"
             has_all   = $false
             total     = $foetexItems.Count
